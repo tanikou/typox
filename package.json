@@ -1,0 +1,19 @@
+{
+  "name": "typox",
+  "version": "2.9.0",
+  "description": "a tiny and simple entity mapper for frontend, aim to improve code quality",
+  "main": "./dist/index.js",
+  "scripts": {
+    "test": "node test.js"
+  },
+  "keywords": [
+    "typox",
+    "anotation",
+    "mapper",
+    "entity",
+    "ORM",
+    "decorator"
+  ],
+  "license": "MIT",
+  "devDependencies": {}
+}
