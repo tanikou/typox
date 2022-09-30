@@ -272,7 +272,7 @@ class Model {
         if (rules.hasOwnProperty('omit')) {
             return;
         }
-        const froms = Array.isArray(rules.from) ? rules.from : [rules.from || name];
+        const froms = Array.isArray(rules.from) ? rules.from.map(v => v) : [rules.from || name];
         let origin = undefined;
         while (origin === undefined && froms.length > 0) {
             origin = pick(froms.shift().split('.'), source);
