@@ -37,7 +37,7 @@ export class Model implements Record<string, unknown> {
 
 export interface ModelConfig {
   enumeration?: any[]
-  from?: string | string[] | undefined
+  from?: string | string[]
   type?: Function | Function[]
   nullable?: boolean
   column?: Record<string, unknown>
@@ -73,7 +73,7 @@ export function merge(value: (v: any, me: Record<any, any>) => any): any
 
 export function recover(value: (v: any, me: Record<any, any>) => any): any
 
-export function from(value?: string): any
+export function from(value?: string | string[]): any
 
 export function enumeration(value: any[]): any
 

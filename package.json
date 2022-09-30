@@ -1,6 +1,6 @@
 {
   "name": "typox",
-  "version": "2.9.1",
+  "version": "2.9.2",
   "description": "a tiny and simple entity mapper for frontend, aim to improve code quality",
   "main": "./dist/index.js",
   "scripts": {
