@@ -9,7 +9,10 @@ const storage_1 = __importDefault(require("./storage"));
 exports.defaults = {
     storage: storage_1.default,
     message: '{entity}.{attr} defined as {type}, got: {value}',
+    /** reverse时忽略空白值字段或者无值字段 */
     lightly: true,
+    /** parse或merge时忽略无配置字段 */
+    ignore: false,
     logger: {
         error(v) {
             throw new ModelError(v);
@@ -272,7 +275,9 @@ class Model {
         if (rules.hasOwnProperty('omit')) {
             return;
         }
-        const froms = Array.isArray(rules.from) ? rules.from.map(v => v) : [rules.from || name];
+        const froms = Array.isArray(rules.from)
+            ? rules.from.map((v) => v)
+            : [rules.from || name];
         let origin = undefined;
         while (origin === undefined && froms.length > 0) {
             origin = pick(froms.shift().split('.'), source);
@@ -375,12 +380,22 @@ class Model {
      * @returns
      */
     parse(source, option) {
+        var _a;
         if (!source) {
             return this;
         }
         const isen = Object.getPrototypeOf(source).constructor ===
             Object.getPrototypeOf(this).constructor;
         const attrs = storage_1.default.entity(this.constructor).attrs;
+        if (((_a = option === null || option === void 0 ? void 0 : option.ignore) !== null && _a !== void 0 ? _a : exports.defaults.ignore) === false) {
+            const ds = attrs.map((v) => v.name);
+            const as = Object.keys(this).filter((v) => !ds.includes(v));
+            Object.keys(source)
+                .filter((v) => as.includes(v))
+                .forEach((k) => {
+                this[k] = source[k];
+            });
+        }
         if (isen) {
             this.doPrivateCopy(source);
         }
@@ -408,9 +423,20 @@ class Model {
      * @param source 需要做合并的数据
      * @returns
      */
-    merge(source) {
+    merge(source, option) {
+        var _a;
         if (!source) {
             return this;
+        }
+        const attrs = storage_1.default.entity(this.constructor).attrs;
+        if (((_a = option === null || option === void 0 ? void 0 : option.ignore) !== null && _a !== void 0 ? _a : exports.defaults.ignore) === false) {
+            const ds = attrs.map((v) => v.name);
+            const as = Object.keys(this).filter((v) => !ds.includes(v));
+            Object.keys(source)
+                .filter((v) => as.includes(v))
+                .forEach((k) => {
+                this[k] = source[k];
+            });
         }
         this.doPrivateCopy(source);
         return this;
@@ -455,18 +481,18 @@ class Model {
     /**
      * 将实体转换为后端接口需要的JSON对象
      */
-    reverse(option = { exclusion: [] }) {
+    reverse(option) {
         const json = {};
         storage_1.default.entity(this.constructor).attrs.forEach((attr) => {
             var _a, _b;
             const { name, rules } = attr;
             if (rules.hasOwnProperty('to') &&
                 !rules.hasOwnProperty('omit') &&
-                !((_a = option.exclusion) === null || _a === void 0 ? void 0 : _a.includes(name))) {
+                !((_a = option === null || option === void 0 ? void 0 : option.exclusion) === null || _a === void 0 ? void 0 : _a.includes(name))) {
                 const val = rules.reverse
                     ? rules.reverse.call(this, this[name], this)
                     : this[name];
-                if (((_b = option.lightly) !== null && _b !== void 0 ? _b : exports.defaults.lightly) === false ||
+                if (((_b = option === null || option === void 0 ? void 0 : option.lightly) !== null && _b !== void 0 ? _b : exports.defaults.lightly) === false ||
                     (val !== '' && val !== null && val !== undefined)) {
                     json[rules.to || name] = val;
                 }

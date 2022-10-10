@@ -4,6 +4,7 @@ import ModelStorage from './storage'
 export interface defaults {
   storage: typeof ModelStorage
   lightly: boolean
+  ignore: boolean
   message: string
   logger: {
     error: (v: string) => void
@@ -11,13 +12,18 @@ export interface defaults {
 }
 
 export interface ReverseOption {
-  lightly?: boolean | undefined
+  lightly?: boolean
   exclusion?: string[]
 }
 
 export interface ParseOption {
+  ignore?: boolean
   nullable?: boolean
   validate?: boolean
+}
+
+export interface MergeOption {
+  ignore?: boolean
 }
 
 export class Model implements Record<string, unknown> {
@@ -26,11 +32,11 @@ export class Model implements Record<string, unknown> {
 
   parse(source?: any, option?: ParseOption): this
 
-  merge(source?: any): this
+  merge(source?: any, option?: MergeOption): this
 
   recover(source: any): this
 
-  reverse(source?: any): any
+  reverse(option?: ReverseOption): any
 
   runDecorators(name: string): Record<string, any>
 }

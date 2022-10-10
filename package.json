@@ -1,6 +1,6 @@
 {
   "name": "typox",
-  "version": "2.9.2",
+  "version": "2.9.3",
   "description": "a tiny and simple entity mapper for frontend, aim to improve code quality",
   "main": "./dist/index.js",
   "scripts": {
@@ -14,6 +14,12 @@
     "ORM",
     "decorator"
   ],
+  "author": "Dan",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/tanikou/typox.git"
+  },
+  "homepage": "https://github.com/tanikou/typox",
   "license": "MIT",
   "devDependencies": {}
 }
